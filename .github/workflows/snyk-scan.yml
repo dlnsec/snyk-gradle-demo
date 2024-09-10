@@ -46,6 +46,7 @@ jobs:
         run: snyk test --file=app/build.gradle.kts --sarif --severity-threshold=high --continue-on-error --debug > snyk_report.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true # Snyk exits with a non-zero code, we want to skip this and generate sarif report
 
       # Upload sarif results to GitHub
       - name: Upload sarif results to GitHub
