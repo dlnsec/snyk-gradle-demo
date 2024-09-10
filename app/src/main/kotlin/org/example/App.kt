@@ -3,13 +3,35 @@
  */
 package org.example
 
+import io.ktor.server.application.*
+import io.ktor.http.*
+import io.ktor.server.request.*
+import io.ktor.http.content.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.*
+
 class App {
-    val greeting: String
+    val message: String
         get() {
-            return "Hello World!"
+            return "Staring server..."
         }
 }
 
 fun main() {
-    println(App().greeting)
+    println(App().message)
+    embeddedServer(Netty, port = 8080) {
+        routing {
+            get("/") {
+                call.respondText("Talk to me")
+            }
+            post("/signup") {
+            val formParameters = call.receiveParameters()
+            val username = formParameters["username"].toString()
+            call.respondText("The '$username' account is created")
+}
+        }
+    }.start(wait = true)
 }
