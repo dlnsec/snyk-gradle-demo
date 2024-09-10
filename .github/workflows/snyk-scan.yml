@@ -47,7 +47,7 @@ jobs:
       # Run Snyk on project
       - name: Run Snyk on project
         working-directory: app
-        run: snyk test --file=build.gradle.kts --sarif --continue-on-error --debug > snyk_report.sarif 2> snyk_errors.log
+        run: snyk test --file=build.gradle.kts --debug
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -58,7 +58,7 @@ jobs:
       # Output sarif report 
       - name: Output sarif report for debugging
         run: cat app/snyk_report.sarif
-        
+
       # Upload sarif results to GitHub
       - name: Upload sarif results to GitHub
         uses: github/codeql-action/upload-sarif@v3
