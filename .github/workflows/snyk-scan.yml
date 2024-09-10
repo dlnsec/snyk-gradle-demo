@@ -25,10 +25,10 @@ jobs:
       # Install Gradle dependencies
       - name: Install Gradle dependencies
         run: ./gradlew build --no-daemon
-    
-      # List files in app directory
-      - name: List files in app directory
-        run: ls -la app
+
+      # List installed dependencies
+      - name: List installed dependencies
+        run: ./gradlew dependencies
 
       # Install Snyk CLI
       - name: Install Snyk CLI
@@ -39,8 +39,11 @@ jobs:
         run: snyk --version
 
       # Run Snyk on project
+      # exit code 0: No vulnerabilities found
+      # exit code 1: Vulnerabilities found
+      # exit code 2: An error occurerd
       - name: Run Snyk on project
-        run: snyk test --file=app/build.gradle.kts --debug || true # manual override to prevent failure
+        run: snyk test --file=app/build.gradle.kts --sarif --continue-on-error --debug > snyk_report.sarif 2> snyk_errors.log || true # manual override to prevent failure
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -52,3 +55,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Output Snyk error logs
+      - name: Output Snyk error logs
+        run: cat app/snyk_errors.log
