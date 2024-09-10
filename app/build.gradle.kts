@@ -9,6 +9,9 @@ plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     alias(libs.plugins.kotlin.jvm)
 
+    // Ktor
+    id("io.ktor.plugin") version "2.3.12"
+
     // Apply the application plugin to add support for building a CLI application in Java.
     application
 }
@@ -18,12 +21,24 @@ repositories {
     mavenCentral()
 }
 
+repositories {
+    maven {
+        url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
+    }
+}
+
 dependencies {
 
     // Include vulnerable dependencies for Snyk
     implementation("org.springframework:spring-core:4.3.0.RELEASE")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.8.0")
     implementation("commons-collections:commons-collections:3.2.1")
+
+    // Include dependencies for lightweight server-side API
+    implementation("io.ktor:ktor-server-core:2.3.12")
+    implementation("io.ktor:ktor-server-netty:2.3.12")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.12")
+    implementation("io.ktor:ktor-server-host-common:2.3.12")
 
     // Use the Kotlin JUnit 5 integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
