@@ -43,7 +43,7 @@ jobs:
       # exit code 1: Vulnerabilities found
       # exit code 2: An error occurerd
       - name: Run Snyk on project
-        run: snyk test --file=app/build.gradle.kts --sarif --continue-on-error --debug > snyk_report.sarif 2> snyk_errors.log || true # manual override to prevent failure
+        run: snyk test --file=app/build.gradle.kts --sarif --continue-on-error --debug > snyk_report.sarif || true # manual override to prevent failure
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -55,6 +55,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Output Snyk error logs
-      - name: Output Snyk error logs
-        run: cat app/snyk_errors.log
